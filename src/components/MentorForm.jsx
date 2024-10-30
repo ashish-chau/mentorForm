@@ -37,21 +37,40 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 
+const today = dayjs();
+
+// import "./MentorForm.css"
+
+function handleClick() {
+  console.log("hello");
+}
+
 // Sample Dashboard Navigation Layout
 const SideNav = () => (
   <Box
     sx={{
-      width: 250,
-      bgcolor: "primary.main",
-      height: "100vh",
+      width: 160,
+      bgcolor: "#0074B7",
       color: "white",
       padding: 2,
     }}
   >
     <Typography variant="h6" gutterBottom>
-      <DashboardIcon sx={{ mr: 1 }} />
-      Dashboard
+      <DashboardIcon sx={{ mr: 1 }} onClick={handleClick} />
     </Typography>
+    <Box>
+      <img
+        src="../../public/nit-logo.jpg"
+        alt="Logo"
+        style={{
+          height: "35px",
+          width: "128px",
+          position: "relative",
+          left: "35px",
+          bottom: "44px",
+        }}
+      />
+    </Box>
     <Box>
       <Typography variant="body1" sx={{ mb: 2 }}>
         Batch Name: Pilot Testing
@@ -325,19 +344,24 @@ const MentorForm = () => {
     });
   };
 
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
+
+  // Toggle function
+  const toggleSidebar = () => {
+    setSidebarOpen(!isSidebarOpen);
+  };
+
+  const isDateDisabled = (date) => {
+    return dayjs(date).isBefore(today, "day");
+  };
+
   return (
     <Box sx={{ display: "flex" }}>
       <SideNav />
       <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static">
+        <AppBar position="static" style={{ color: "#0074B7" }}>
           <Toolbar>
-            <Typography variant="h6" sx={{ flexGrow: 1 }}>
-              <img
-                src="../../public/nit-logo.jpg"
-                alt="Logo"
-                style={{ height: "40px", marginRight: "10px" }}
-              />
-            </Typography>
+            <Typography variant="h6" sx={{ flexGrow: 1 }}></Typography>
             <Button color="inherit" startIcon={<LogoutIcon />}>
               Logout
             </Button>
@@ -412,6 +436,7 @@ const MentorForm = () => {
                           label="Date of Announcement"
                           value={announcementDate}
                           onChange={(newValue) => setAnnouncementDate(newValue)}
+                          shouldDisableDate={isDateDisabled}
                           renderInput={(params) => (
                             <TextField {...params} fullWidth />
                           )}
